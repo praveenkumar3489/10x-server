@@ -30,7 +30,8 @@ app.use('/graphql', graphqlHTTP({
 }));
 
 router(app);
+const PORT = process.env.PORT || 3000;
 
-app.listen(3000, () => {
-  console.log('App listening on port 3000')
+app.listen(PORT, () => {
+  console.log(`Our app is running on port ${ PORT }`);
 })
