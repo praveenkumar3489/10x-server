@@ -9,7 +9,7 @@ const config = require('../config');
 module.exports = () => {
     return {
         list: async(req, res) => {
-        	return await User.findAll();
+        	return await User.find();
         },
         getItem: async(req, res) => {
         	let userId = req.query.id;
@@ -17,7 +17,9 @@ module.exports = () => {
         	return await User.findOne({ '_id':userId })
         },
         create: async(req, res) => {
-        	let userData = req.params.user;
+        	let firstname = req.params.firstname,
+        	lastname = req.params.lastname,
+        	gender = req.params.gender,
         	console.log('userData >>', userData);
         	return new User(userData).save()
         },
