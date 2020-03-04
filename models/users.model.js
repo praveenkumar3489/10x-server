@@ -138,5 +138,5 @@ UsersSchema.methods = {
 
 
 
-var Users = mongoose.model('User', UsersSchema);
+var User = mongoose.model('User', UsersSchema);
 
