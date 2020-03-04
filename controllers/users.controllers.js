@@ -1,6 +1,6 @@
-// const User = require('../models/users.model');
-const mongoose = require('mongoose');
-const User = mongoose.model('User');
+const User = require('../models/users.model');
+// const mongoose = require('mongoose');
+// const User = mongoose.model('User');
 
 
 const config = require('../config');
