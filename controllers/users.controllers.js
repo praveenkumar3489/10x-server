@@ -17,13 +17,7 @@ module.exports = () => {
         	return await User.findOne({ '_id':userId })
         },
         create: async(req, res) => {
-        	let userData = {
-        		"firstname": req.params.firstname,
-        		"lastname": req.params.lastname,
-        		"gender": req.params.gender
-        	};
-        	var newUser =  new User(userData);
-        	return newUser.save()
+        	return new User(req.body).save()
         },
         update: async(req, res) => {
         }
