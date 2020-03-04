@@ -17,10 +17,11 @@ module.exports = () => {
         	return await User.findOne({ '_id':userId })
         },
         create: async(req, res) => {
-        	let firstname = req.params.firstname,
-        	lastname = req.params.lastname,
-        	gender = req.params.gender,
-        	console.log('userData >>', userData);
+        	let userData = {
+        		"firstname": req.params.firstname,
+        		"lastname": req.params.lastname,
+        		"gender": req.params.gender
+        	};
         	return new User(userData).save()
         },
         update: async(req, res) => {
