@@ -22,7 +22,8 @@ module.exports = () => {
         		"lastname": req.params.lastname,
         		"gender": req.params.gender
         	};
-        	return new User(userData).save()
+        	var newUser =  new User(userData);
+        	return newUser.save()
         },
         update: async(req, res) => {
         }
