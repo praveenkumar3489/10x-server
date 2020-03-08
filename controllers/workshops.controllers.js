@@ -1,10 +1,15 @@
-const User = require('../models/users.model');
+const Workshop = require('../models/workshops.model');
 
 module.exports = () => {
 	return {
 		list: async(req, res, next) => {
-			User.find()
+			let category = req.params.cid,
+			subCategory = req.params.scid.split(',');
+			console.log("category: ",category);
+			console.log("subCategory: ",subCategory);
+			Workshop.find({'name':category, 'subCategory': {'$in': subCategory} })
 		    .exec(function(err,data){
+		    	console.log("err:", err);
 		        if(err) return next({
 		          error: err,
 		          code: 400
@@ -15,9 +20,8 @@ module.exports = () => {
 		    })
 		},
 		getItem: async(req, res, next) => {
-			let userId = req.params.id;
-			console.log('userId >>', userId);
-			User.findOne({ '_id':userId })
+			let workshopId = req.params.wid;
+			Workshop.findOne({ '_id':workshopId })
 		    .exec(function(err,data){
 		        if(err) return next({
 		          error: err,
@@ -29,21 +33,8 @@ module.exports = () => {
 		    })
 		},
 		create: async(req, res, next) => {
-			let newUser = new User(req.body)
-			newUser.save(function(err,data){
-				if(err) return next({
-				  error: err,
-				  code: 400
-				})
-				res.json({
-					'response': data,
-				})
-			})
-		},
-		delete: async(req, res) => {
-			req.body.isBlocked = true
-			let newUser = new User(req.body)
-			newUser.save(function(err,data){
+			let newWorkshop = new Workshop(req.body)
+			newWorkshop.save(function(err,data){
 				if(err) return next({
 				  error: err,
 				  code: 400
