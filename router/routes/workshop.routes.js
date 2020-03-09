@@ -3,16 +3,14 @@
 module.exports = (app) => {
     var router = require('express').Router();
     
-    var controller = require('../../controllers/users.controllers')();
+    var controller = require('../../controllers/workshops.controllers')();
     // const middlewares = require('../../middlewares');
 
-    router.route('/allusers')
+    router.route('/allworkshop/:cid/:scid')
         .get(controller.list);
-    router.route('/user/:id')
+    router.route('/workshop/:wid')
         .get(controller.getItem);
-    router.route('/user')
+    router.route('/workshop')
         .post(controller.create);
-    router.route('/user/:id')
-        .delete(controller.delete);
     app.use('/api',router);
 };
