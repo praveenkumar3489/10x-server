@@ -6,11 +6,15 @@ module.exports = (app) => {
     var controller = require('../../controllers/workshops.controllers')();
     // const middlewares = require('../../middlewares');
 
-    router.route('/allworkshop/:cid/:scid')
+    router.route('/allWorkshop/:cid/:scid')
         .get(controller.list);
-    router.route('/workshop/:wid')
+    router.route('/workshop/:wid/')
         .get(controller.getItem);
+    router.route('/workshop/:wid/meta')
+        .get(controller.getMeta);
     router.route('/workshop')
         .post(controller.create);
+    router.route('/workshop/:wid')
+        .put(controller.update);
     app.use('/api',router);
 };

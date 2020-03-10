@@ -2,7 +2,7 @@ const Team = require('../models/teams.model');
 
 module.exports = () => {
 	return {
-		validateTeamId: async (req, res) => {
+		validateTeamId: async (req, res, next) => {
 			console.log('validateTeamId');
 			let teamId = req.params.teamId ? req.params.teamId : req.body.teamId ? req.body.teamId : '';
 			if (!teamId) {

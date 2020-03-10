@@ -7,7 +7,19 @@ const config = require('../config');
 
 module.exports = () => {
 	return {
-		membersList: async (req, res) => {
+		list: async(req, res, next) => {
+			Team.find()
+		    .exec(function(err,data){
+		        if(err) return next({
+		          error: err,
+		          code: 400
+		        })
+		        res.json({
+	                'response': data
+	            })
+		    })
+		},
+		membersList: async (req, res, next) => {
 			Team.find({
 				_id: { $in: req.params.teamId }
 			})
@@ -23,10 +35,10 @@ module.exports = () => {
 					});
 				});
 		},
-		update: async (req, res) => {
+		update: async (req, res, next) => {
 			Team.findOneAndUpdate(
 				{
-					_id: { $eq: req.body.teamId }
+					_id: { $eq: req.params.teamId }
 				},
 				req.body,
 				(err, data) => {
@@ -40,6 +52,18 @@ module.exports = () => {
 					});
 				}
 			);
-		}
+		},
+		create: async(req, res, next) => {
+			let newTeam = new Team(req.body)
+			newTeam.save(function(err,data){
+				if(err) return next({
+				  error: err,
+				  code: 400
+				})
+				res.json({
+					'response': data,
+				})
+			})
+		},
 	};
 };

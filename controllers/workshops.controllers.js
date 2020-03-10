@@ -5,7 +5,7 @@ module.exports = () => {
 		list: async(req, res, next) => {
 			let category = req.params.cid,
 			subCategory = req.params.scid.split(',');
-			Workshop.find({'name':category, 'subCategory': {'$in': subCategory} })
+			Workshop.find({'_id':category, 'subCategory': {'$in': subCategory} })
 		    .exec(function(err,data){
 		    	console.log("err:", err);
 		        if(err) return next({
@@ -20,6 +20,23 @@ module.exports = () => {
 		getItem: async(req, res, next) => {
 			let workshopId = req.params.wid;
 			Workshop.findOne({ '_id':workshopId })
+			.populate('subCategory.ideas.userId')
+		    .exec(function(err,data){
+		        if(err) return next({
+		          error: err,
+		          code: 400
+		        })
+		        res.json({
+	                'response': data
+	            })
+		    })
+		},
+		getMeta: async(req, res, next) => {
+			let workshopId = req.params.wid;
+			Workshop.findOne({ '_id':workshopId })
+			.populate('subCategory.ideas.userId')
+			.populate('team')
+			.populate('team.members.$')
 		    .exec(function(err,data){
 		        if(err) return next({
 		          error: err,
@@ -40,8 +57,28 @@ module.exports = () => {
 				})
 				res.json({
 					'response': data,
+					'code': 201
 				})
 			})
+		},
+		update: async (req, res) => {
+			Workshop.findOneAndUpdate(
+				{
+					_id: { $eq: req.params.wid }
+				},
+				req.body,
+				(err, data) => {
+					if (err)
+						return next({
+							error: err,
+							code: 400
+						});
+					res.json({
+						'response': "Updated Successfully",
+						'code': 200
+					});
+				}
+			);
 		}
 	}
 }
