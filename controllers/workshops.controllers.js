@@ -1,11 +1,14 @@
 const Workshop = require('../models/workshops.model');
+let mongoose = require('mongoose'), 
+ObjectId = mongoose.Types.ObjectId;
 
 module.exports = () => {
 	return {
 		list: async(req, res, next) => {
 			let category = req.params.cid,
 			subCategory = req.params.scid.split(',');
-			Workshop.find({'_id':category, 'subCategory': {'$in': subCategory} })
+			console.log('category:', subCategory);
+			Workshop.find({'_id':ObjectId(category), 'subCategory.text': {'$in': subCategory} })
 		    .exec(function(err,data){
 		    	console.log("err:", err);
 		        if(err) return next({
