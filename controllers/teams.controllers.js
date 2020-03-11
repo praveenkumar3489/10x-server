@@ -7,10 +7,24 @@ const config = require('../config');
 
 module.exports = () => {
 	return {
-		membersList: async (req, res) => {
+		getById: async (req, res) => {
 			Team.find({
-				_id: { $in: req.params.teamId }
+				_id: { $eq: req.params.teamId }
 			})
+				.populate('members')
+				.exec((err, data) => {
+					if (err)
+						return next({
+							error: err,
+							code: 400
+						});
+					res.json({
+						response: data
+					});
+				});
+		},
+		getAll: async (req, res) => {
+			Team.find()
 				.populate('members')
 				.exec((err, data) => {
 					if (err)
