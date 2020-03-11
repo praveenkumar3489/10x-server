@@ -1,4 +1,5 @@
-const Workshop = require('../models/workshops.model');
+const Workshop = require('../models/workshops.model'),
+User = require('../models/users.model');
 let mongoose = require('mongoose'), 
 ObjectId = mongoose.Types.ObjectId;
 
@@ -23,6 +24,8 @@ module.exports = () => {
 		getItem: async(req, res, next) => {
 			let workshopId = req.params.wid;
 			Workshop.findOne({ '_id':workshopId })
+			.populate('facilitators')
+			.populate('action')
 			.populate('subCategory.ideas.userId')
 		    .exec(function(err,data){
 		        if(err) return next({
@@ -38,16 +41,32 @@ module.exports = () => {
 			let workshopId = req.params.wid;
 			Workshop.findOne({ '_id':workshopId })
 			.populate('subCategory.ideas.userId')
+			.populate('facilitators')
 			.populate('team')
-			.populate('team.members.$')
 		    .exec(function(err,data){
-		        if(err) return next({
-		          error: err,
-		          code: 400
-		        })
-		        res.json({
-	                'response': data
-	            })
+		    	if(data.team && data.team.members) {
+		    		User.find({'_id': {'$in':data.team.members}})
+		    		.exec(function(error, members){
+		    			data.team.members = members
+		    			if(error) return next({
+				          error: error,
+				          code: 400
+				        })
+				        res.json({
+			                'response': data
+			            })
+		    		})
+				        	
+		    	} else {
+		    		if(err) return next({
+				          error: err,
+				          code: 400
+			        })
+			        res.json({
+		                'response': data
+		            })
+		    	}
+		    	
 		    })
 		},
 		create: async(req, res, next) => {

@@ -42,7 +42,11 @@ var WorkshopSchema = new Schema({
     team: {
     	type: ObjectId,
         ref: 'Team'
-    }
+    },
+    facilitators: [{
+        type: ObjectId,
+        ref: 'User'
+    }]
 })
 
 module.exports = mongoose.model('Workshop', WorkshopSchema);
