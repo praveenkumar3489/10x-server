@@ -23,6 +23,18 @@ module.exports = () => {
 					});
 				});
 		},
+		list: async (req, res, next) => {
+			Team.find().exec(function(err, data) {
+				if (err)
+					return next({
+						error: err,
+						code: 400
+					});
+				res.json({
+					response: data
+				});
+			});
+		},
 		getAll: async (req, res) => {
 			Team.find()
 				.populate('members')
@@ -37,10 +49,11 @@ module.exports = () => {
 					});
 				});
 		},
-		update: async (req, res) => {
+
+		update: async (req, res, next) => {
 			Team.findOneAndUpdate(
 				{
-					_id: { $eq: req.body.teamId }
+					_id: { $eq: req.params.teamId }
 				},
 				req.body,
 				(err, data) => {
@@ -54,6 +67,19 @@ module.exports = () => {
 					});
 				}
 			);
+		},
+		create: async (req, res, next) => {
+			let newTeam = new Team(req.body);
+			newTeam.save(function(err, data) {
+				if (err)
+					return next({
+						error: err,
+						code: 400
+					});
+				res.json({
+					response: data
+				});
+			});
 		}
 	};
 };

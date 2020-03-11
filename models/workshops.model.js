@@ -12,30 +12,37 @@ var mongoose = require('mongoose'),
 
 var WorkshopSchema = new Schema({
 	name: {
-        type: String
+        type: String,
+        trim: true
     },
     action: {
         type: ObjectId,
         ref: 'Actions'
     },
-    subCategory: {
-    	type: String
-    },
+    subCategory: [{
+    	text: String,
+        ideas: [{
+            text: { type: String},
+            userId: {
+                type: ObjectId,
+                ref: 'User'
+            },
+            comments: [{
+                text: { type: String},
+                userId: {
+                    type: ObjectId,
+                    ref: 'User'
+                }
+            }],
+        }],
+    }],
     maxActionPerUser: {
     	type: Number
     },
-    comments: [
-    	{
-    		text: { type: String},
-    		userId: {
-    			type: ObjectId,
-        		ref: 'User'}
-    	}
-    ]
-    // team: {
-    // 	type: ObjectId,
-    //     ref: 'User'
-    // }
+    team: {
+    	type: ObjectId,
+        ref: 'Team'
+    }
 })
 
 module.exports = mongoose.model('Workshop', WorkshopSchema);
