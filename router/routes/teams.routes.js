@@ -6,7 +6,7 @@ module.exports = app => {
 	let controller = require('../../controllers/teams.controllers')();
 	let middlewares = require('../../middlewares/teams.middlewares')();
 
-	router.route('/members/:teamId').get(middlewares.validateTeamId, controller.membersList);
+	router.route('/teams/:teamId').get(middlewares.validateTeamId, controller.membersList);
 	router.route('/teams').post(middlewares.validateTeamId, controller.update);
 
 	app.use('/api', router);
