@@ -7,21 +7,9 @@ const config = require('../config');
 
 module.exports = () => {
 	return {
-		list: async(req, res, next) => {
-			Team.find()
-		    .exec(function(err,data){
-		        if(err) return next({
-		          error: err,
-		          code: 400
-		        })
-		        res.json({
-	                'response': data
-	            })
-		    })
-		},
-		membersList: async (req, res, next) => {
+		getById: async (req, res) => {
 			Team.find({
-				_id: { $in: req.params.teamId }
+				_id: { $eq: req.params.teamId }
 			})
 				.populate('members')
 				.exec((err, data) => {
@@ -35,6 +23,33 @@ module.exports = () => {
 					});
 				});
 		},
+		list: async (req, res, next) => {
+			Team.find().exec(function(err, data) {
+				if (err)
+					return next({
+						error: err,
+						code: 400
+					});
+				res.json({
+					response: data
+				});
+			});
+		},
+		getAll: async (req, res) => {
+			Team.find()
+				.populate('members')
+				.exec((err, data) => {
+					if (err)
+						return next({
+							error: err,
+							code: 400
+						});
+					res.json({
+						response: data
+					});
+				});
+		},
+
 		update: async (req, res, next) => {
 			Team.findOneAndUpdate(
 				{
@@ -53,17 +68,18 @@ module.exports = () => {
 				}
 			);
 		},
-		create: async(req, res, next) => {
-			let newTeam = new Team(req.body)
-			newTeam.save(function(err,data){
-				if(err) return next({
-				  error: err,
-				  code: 400
-				})
+		create: async (req, res, next) => {
+			let newTeam = new Team(req.body);
+			newTeam.save(function(err, data) {
+				if (err)
+					return next({
+						error: err,
+						code: 400
+					});
 				res.json({
-					'response': data,
-				})
-			})
-		},
+					response: data
+				});
+			});
+		}
 	};
 };
