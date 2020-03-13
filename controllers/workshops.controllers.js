@@ -9,7 +9,11 @@ module.exports = () => {
 			let category = req.params.cid,
 			subCategory = req.params.scid.split(',');
 			console.log('category:', subCategory);
-			Workshop.find({'_id':ObjectId(category), 'subCategory.text': {'$in': subCategory} })
+			let query = {'_id':ObjectId(category)  }
+			if(req.params.scid !== 'all'){
+				query['subCategory.text'] = {'$in': subCategory}
+			}
+			Workshop.find(query)
 		    .exec(function(err,data){
 		    	console.log("err:", err);
 		        if(err) return next({
