@@ -1,4 +1,6 @@
 const Team = require('../models/teams.model');
+let mongoose = require('mongoose'),
+	ObjectId = mongoose.Types.ObjectId;
 
 module.exports = () => {
 	return {
@@ -11,7 +13,7 @@ module.exports = () => {
 					code: 400
 				});
 			} else {
-				Team.findOne({ _id: { $eq: req.params.teamId } }, (err, data) => {
+				Team.findOne({ _id: { $eq: ObjectId(req.params.teamId) } }, (err, data) => {
 					if (err) {
 						res.json({
 							error: err,

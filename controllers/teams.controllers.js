@@ -3,13 +3,15 @@ const Team = require('../models/teams.model');
 // const User = mongoose.model('User');
 
 const config = require('../config');
+let mongoose = require('mongoose'),
+	ObjectId = mongoose.Types.ObjectId;
 // test
 
 module.exports = () => {
 	return {
 		getById: async (req, res) => {
 			Team.find({
-				_id: { $eq: req.params.teamId }
+				_id: { $eq: ObjectId(req.params.teamId) }
 			})
 				.populate('members')
 				.exec((err, data) => {
@@ -53,7 +55,7 @@ module.exports = () => {
 		update: async (req, res, next) => {
 			Team.findOneAndUpdate(
 				{
-					_id: { $eq: req.params.teamId }
+					_id: { $eq: ObjectId(req.params.teamId) }
 				},
 				req.body,
 				(err, data) => {
